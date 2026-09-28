@@ -7,6 +7,7 @@ import time
 from pathlib import Path
 
 import pandas as pd
+import pyarrow.parquet as pq
 import requests
 
 from . import config
@@ -54,8 +55,8 @@ def _read(url: str, season: int | None, columns: list[str]) -> pd.DataFrame | No
     path = fetch(url, season)
     if path is None:
         return None
-    df = pd.read_parquet(path)
-    return df[[c for c in columns if c in df.columns]]
+    present = set(pq.read_schema(path).names)
+    return pd.read_parquet(path, columns=[c for c in columns if c in present])
 
 
 def load_season(season: int) -> tuple[pd.DataFrame, dict[str, bool]]:
