@@ -1,0 +1,6 @@
+pandas>=2.2
+pyarrow>=15
+streamlit>=1.38
+altair>=5
+requests>=2.31
+pytest>=8
